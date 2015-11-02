@@ -21,6 +21,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.googlecode.objectify.Key;
 
 import java.lang.String;
@@ -39,6 +40,7 @@ import java.util.List;
  * NOTE - all the properties are PUBLIC so that can keep the code simple.
  **/
 @Entity
+@JacksonXmlRootElement(localName="greeting")
 public class Greeting {
   @Parent Key<Guestbook> theBook;
   @Id public Long id;
