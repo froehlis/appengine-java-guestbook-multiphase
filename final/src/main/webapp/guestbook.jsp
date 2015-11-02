@@ -57,7 +57,7 @@
           .type(Greeting.class) // We want only Greetings
           .ancestor(theBook)    // Anyone in this book
           .order("-date")       // Most recent first - date is indexed.
-          .limit(5)             // Only show 5 of them.
+          //.limit(5)             // Only show 5 of them.
           .list();
 
     if (greetings.isEmpty()) {
@@ -84,7 +84,7 @@
             pageContext.setAttribute("greeting_user", author);
 %>
 <p><b>${fn:escapeXml(greeting_user)}</b> wrote:</p>
-<blockquote>${fn:escapeXml(greeting_content)}</blockquote>
+<blockquote>Your website is awesome! ${fn:escapeXml(greeting_content)}</blockquote>
 <%
         }
     }

@@ -28,6 +28,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +50,7 @@ public class SignGuestbookServlet extends HttpServlet {
   // Process the http POST of the form
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	  System.out.println("doPost");
     Greeting greeting;
 
     UserService userService = UserServiceFactory.getUserService();
@@ -59,12 +63,34 @@ public class SignGuestbookServlet extends HttpServlet {
     } else {
       greeting = new Greeting(guestbookName, content);
     }
+    
 
     // Use Objectify to save the greeting and now() is used to make the call synchronously as we
     // will immediately get a new page using redirect and we want the data to be present.
     ObjectifyService.ofy().save().entity(greeting).now();
+    deleteWhenToMuch(5, greeting.theBook);
 
     resp.sendRedirect("/guestbook.jsp?guestbookName=" + guestbookName);
   }
+
+
+public  void deleteWhenToMuch(int i, com.googlecode.objectify.Key<Guestbook> theBook){
+	if(theBook == null || i < 0){
+		return;
+	}
+	
+	List<Greeting> greetings = ObjectifyService.ofy().load().type(Greeting.class).ancestor(theBook).order("-date").list();
+	 
+	List<Greeting> res = new LinkedList<Greeting>(); 
+	 
+	if(greetings.size() > i){
+		 res = greetings.subList(i, greetings.size());
+		 ObjectifyService.ofy().delete().entities(res);
+	}
+	 
+	 
+	 
+}
+
 }
 //[END all]
